@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Psychic Game</title>
+
+    
+</head>
+<body>
+    <div id="game">
+
+        <h1>Psychic Game</h1>
+
+        <p>Guess what letter I'm thinking off</p><br>
+
+        <p id="win">Wins: 0</p>
+
+        <p id="loss">Losses: 0</p>
+
+        <p id="guessesleft">Guesses Left: 9</p>
+
+        <p id="myGuesses">Your guesses so far: </p>
+
+    </div>
+<script type="text/javascript">
+	/* set all variables and needed functions to single game variable */
+var arrletters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s",
+"t", "u", "v", "w", "x", "y", "z"];
+var wins = 0;
+var losses = 0;
+//User gets 9 guesses before the game restarts
+var guesses = 9;
+var guessesLeft = 9;
+//array to push the 9 guessed answer choices to for comparison
+var guessedArr = [];
+//output random letter for computer choice
+var randomLetter = arrletters[Math.floor(Math.random() * arrletters.length)];
+
+var gameEvent = {
+	//update variables for guesses left, players guesses, & computers choice
+    updateGuessesLeft : function() {
+        document.querySelector("#guessesleft").innerHTML = "Guesses Left: " + guessesLeft;
+    },
+    updateguessedArr : function() {
+        document.querySelector("#myGuesses").innerHTML = "Your guesses so far: " + guessedArr.join(', ');
+    },
+    updateComputerChoice : function() {
+        randomLetter = arrletters[Math.floor(Math.random() * arrletters.length)];
+    },
+    //resets variables after the 9 guesses by player is wrong then calls previous f(x)
+    reset : function () {
+        guessesLeft = 9;
+        guessedArr = [];
+        gameEvent.updateGuessesLeft();
+        gameEvent.updateguessedArr();
+        gameEvent.updateComputerChoice();
+    },
+}
+	//scan user's input and change to lowercase string to make uniform
+    document.addEventListener('keyup', function(event){
+    var userGuess = String.fromCharCode(event.keyCode).toLowerCase();
+    //decrease guess count, push user's choice into array called userGuess
+    guessesLeft--;
+    guessedArr.push(userGuess);
+    //call functions nested in game event function
+    gameEvent.updateGuessesLeft();
+    gameEvent.updateguessedArr();
+
+    if ((guessesLeft > 0) && (userGuess == randomLetter)) {
+            wins++;
+            document.querySelector("#win").innerHTML = "Wins: " + wins;
+            gameEvent.reset();
+    }
+    else if (guessesLeft == 0) {
+        losses++;
+        document.querySelector("#loss").innerHTML = "Losses: " + losses;
+        gameEvent.reset();
+    }
+});
+
+
+
+</script>
+</body>
+</html>
